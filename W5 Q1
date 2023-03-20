@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define MAX_CHAR 100
+#define MAX_CHAR 26
 
 void countFreq(char *str, int *freq)
 {
