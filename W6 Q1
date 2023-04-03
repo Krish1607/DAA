@@ -1,0 +1,61 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Graph {
+    int V;
+    list<int> *adj;
+
+public:
+    Graph(int V);
+    void addEdge(int v, int w);
+    bool isReachable(int s, int d);
+    void DFS(int v, bool visited[]);
+};
+
+Graph::Graph(int V) {
+    this->V = V;
+    adj = new list<int>[V];
+}
+
+void Graph::addEdge(int v, int w) {
+    adj[v].push_back(w);
+}
+
+void Graph::DFS(int v, bool visited[]) {
+    visited[v] = true;
+    for (auto i = adj[v].begin(); i != adj[v].end(); ++i) {
+        if (!visited[*i])
+            DFS(*i, visited);
+    }
+}
+
+bool Graph::isReachable(int s, int d) {
+    bool *visited = new bool[V];
+    for (int i = 0; i < V; i++)
+        visited[i] = false;
+
+    DFS(s, visited);
+
+    if (visited[d])
+        return true;
+
+    return false;
+}
+
+int main() {
+    int V, E;
+    cin >> V >> E;
+    Graph g(V);
+    for (int i = 0; i < E; i++) {
+        int u, v;
+        cin >> u >> v;
+        g.addEdge(u, v);
+    }
+    int s, d;
+    cin >> s >> d;
+    if (g.isReachable(s, d))
+        cout << "There is a path from " << s << " to " << d << endl;
+    else
+        cout << "There is no path from " << s << " to " << d << endl;
+    return 0;
+}
