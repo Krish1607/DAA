@@ -1,0 +1,64 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+// Structure to represent an activity
+struct Activity {
+    int start;
+    int finish;
+};
+
+// Comparator function to sort activities based on finishing times
+bool compareActivities(const Activity& a1, const Activity& a2) {
+    return a1.finish < a2.finish;
+}
+
+// Function to select maximum non-conflicting activities
+std::vector<Activity> selectActivities(const std::vector<Activity>& activities) {
+    std::vector<Activity> selectedActivities;
+
+    // Sort activities based on finishing times
+    std::vector<Activity> sortedActivities = activities;
+    std::sort(sortedActivities.begin(), sortedActivities.end(), compareActivities);
+
+    selectedActivities.push_back(sortedActivities[0]); // Add the first activity to the selected list
+    int lastFinishTime = sortedActivities[0].finish;
+
+    // Iterate through remaining activities
+    for (int i = 1; i < sortedActivities.size(); i++) {
+        int startTime = sortedActivities[i].start;
+        int finishTime = sortedActivities[i].finish;
+
+        if (startTime >= lastFinishTime) {
+            selectedActivities.push_back(sortedActivities[i]);
+            lastFinishTime = finishTime;
+        }
+    }
+
+    return selectedActivities;
+}
+
+// Utility function to print activities
+void printActivities(const std::vector<Activity>& activities) {
+    std::cout << "Selected Activities:\n";
+    for (const Activity& activity : activities) {
+        std::cout << "(" << activity.start << ", " << activity.finish << ")\n";
+    }
+}
+
+int main() {
+    // Example usage
+    std::vector<Activity> activities = {
+        {1, 2},
+        {3, 4},
+        {0, 6},
+        {5, 7},
+        {8, 9},
+        {5, 9}
+    };
+
+    std::vector<Activity> selectedActivities = selectActivities(activities);
+    printActivities(selectedActivities);
+
+    return 0;
+}
